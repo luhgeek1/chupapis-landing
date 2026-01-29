@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>чупапис | Olympiad Prod Team</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Space Grotesk', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
+            colors: {
+              brand: {
+                dark: '#000000', 
+                surface: '#09090b', 
+                accent: '#FFFFFF', 
+                muted: '#a1a1aa',
+                border: '#27272a'
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #000000;
+        color: #ffffff;
+        overflow-x: hidden;
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #000000;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #333;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "@react-three/drei": "https://esm.sh/@react-three/drei@^10.7.7",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "framer-motion": "https://esm.sh/framer-motion@^12.29.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "@react-three/fiber": "https://esm.sh/@react-three/fiber@^9.5.0",
+    "maath/": "https://esm.sh/maath@^0.10.8/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+</html>
