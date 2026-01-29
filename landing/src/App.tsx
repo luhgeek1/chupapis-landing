@@ -1,11 +1,14 @@
 import React from 'react';
 import { ArrowDown, Cpu, Terminal, Coffee } from 'lucide-react';
+import Background3D from './components/background/Background';
 import { TEAM_NAME, TEAM_DESCRIPTION, STATS } from './shared/constants';
 
 function App() {
   return (
-    <div className="min-h-screen bg-black text-white">
-      <main className="container mx-auto px-6 py-16 space-y-24">
+    <div className="min-h-screen relative bg-black text-white selection:bg-brand-accent selection:text-black">
+      <Background3D />
+
+      <main className="container mx-auto px-6 py-16 space-y-24 relative z-10">
         <section id="hero" className="space-y-6 text-center">
           <p className="text-xs uppercase tracking-[0.2em] text-white/60">by вайбкодер's</p>
           <h1 className="text-6xl md:text-8xl font-bold tracking-tighter">{TEAM_NAME}</h1>
