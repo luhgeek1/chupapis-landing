@@ -20,11 +20,17 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick }) =>
       onClick={() => onClick(project)}
       className="group relative flex flex-col h-full bg-brand-surface border border-brand-border rounded-xl overflow-hidden hover:border-brand-accent transition-colors duration-300 cursor-pointer"
     >
-      <div className={`h-48 w-full ${project.imagePlaceholderColor} relative flex items-center justify-center overflow-hidden border-b border-brand-border`}>
+      <div className={`h-48 w-full ${project.imagePlaceholderColor} relative overflow-hidden border-b border-brand-border`}>
+         {project.imageSrc && (
+            <img
+               src={project.imageSrc}
+               alt={`${project.title} preview`}
+               className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+         )}
 
-
-         <Layers className="text-white/20 group-hover:text-white/80 group-hover:scale-105 transition-all duration-500" size={48} />
-         <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-500" />
+         <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-500" />
+         
       </div>
 
       <div className="p-6 flex flex-col flex-grow">

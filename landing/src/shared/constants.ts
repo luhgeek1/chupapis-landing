@@ -2,6 +2,11 @@ import { Project, TeamMember, TeamStats } from './types';
 
 const stepanPhoto = new URL('../assets/Step.png', import.meta.url).href;
 const MarksPhoto = new URL('../assets/Mark.PNG', import.meta.url).href;
+const autoImage = new URL('../assets/auto.png', import.meta.url).href;
+const codeImage = new URL('../assets/code.png', import.meta.url).href;
+const bookImage = new URL('../assets/book.png', import.meta.url).href;
+const finImage = new URL('../assets/fin.png', import.meta.url).href;
+const botImage = new URL('../assets/bot.png', import.meta.url).href;
 
 export const TEAM_NAME = "чупапис";
 export const TEAM_DESCRIPTION = "Мы — команда из двух разработчиков: frontend и backend. Уже больше двух лет мы работаем вместе и за это время успели реализовать несколько масштабных проектов. На Олимпиаде Prod мы делаем веб-продукт под ключ: React на фронте и Python на бэке — с упором на качество, архитектуру и скорость.";
@@ -67,6 +72,7 @@ export const PROJECTS: Project[] = [
     link: "https://github.com/laughinme/CodeMetrics",
     tags: ["React", "Vite", "Tailwind", "TS", "FastAPI", "PostgreSQL", "Redis", "Docker", "Nginx"],
     imagePlaceholderColor: "bg-neutral-900",
+    imageSrc: codeImage,
   },
 
   {
@@ -87,6 +93,7 @@ export const PROJECTS: Project[] = [
     link: "https://github.com/laughinme/auto-spare-parts",
     tags: ["React", "Vite", "Tailwind", "TS", "FastAPI", "PostgreSQL", "Redis", "Nginx"],
     imagePlaceholderColor: "bg-zinc-900",
+    imageSrc: autoImage,
   },
 
   {
@@ -105,8 +112,8 @@ export const PROJECTS: Project[] = [
     type: "web + app",
     link: "https://github.com/laughinme/hackathon",
     tags: ["React", "Vite", "Tailwind", "JS", "FastAPI", "PostgreSQL", "Redis", "Nginx"],
-
     imagePlaceholderColor: "bg-stone-900",
+    imageSrc: bookImage,
   },
 
   {
@@ -127,6 +134,7 @@ export const PROJECTS: Project[] = [
     link: "https://github.com/laughinme/financial-work",
     tags: ["React", "Vite", "CSS", "JS", "FastAPI", "PostgreSQL", "Redis", "Docker", "Nginx"],
     imagePlaceholderColor: "bg-neutral-800",
+    imageSrc: finImage,
   },
 
   {
@@ -148,5 +156,6 @@ export const PROJECTS: Project[] = [
     link: "https://github.com/laughinme/helpus3",
     tags: ["Python", "Telegram Bot", "aiogram", "Parsing", "Notifications"],
     imagePlaceholderColor: "bg-zinc-800",
+    imageSrc: botImage,
   },
 ];

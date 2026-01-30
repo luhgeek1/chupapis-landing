@@ -6,6 +6,7 @@ export interface Project {
   link: string;
   tags: string[];
   imagePlaceholderColor: string;
+  imageSrc?: string;
   techHighlights?: string[];
   type: string;
   timeline:string;
