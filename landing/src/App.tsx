@@ -144,10 +144,7 @@ function App() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8 }}
                 >
-                  <div className="inline-block px-4 py-1.5 mb-8 border border-white/20 rounded-full bg-white/5 backdrop-blur-sm">
-                    <span className="text-white font-mono text-xs uppercase tracking-[0.2em]">by вайбкодер's</span>
-                  </div>
-                  
+
                   <h1 className="text-7xl md:text-9xl font-bold font-sans tracking-tighter mb-6 text-white">
                     {TEAM_NAME}
                   </h1>
