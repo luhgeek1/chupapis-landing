@@ -8,7 +8,7 @@ export interface Project {
   imagePlaceholderColor: string;
   imageSrc?: string;
   techHighlights?: string[];
-  type: string;
+  githubUrl: string;
   timeline:string;
 }
 
