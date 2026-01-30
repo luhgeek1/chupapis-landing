@@ -2,7 +2,8 @@ import React from 'react';
 import { ArrowDown, Cpu, Terminal, Coffee } from 'lucide-react';
 import Background3D from './components/background/Background';
 import MemberCard from './components/team/MemberCard';
-import { TEAM_NAME, TEAM_DESCRIPTION, STATS, MEMBERS } from './shared/constants';
+import ProjectCard from './components/projects/ProjectCard';
+import { TEAM_NAME, TEAM_DESCRIPTION, STATS, MEMBERS, PROJECTS } from './shared/constants';
 
 function App() {
   return (
@@ -58,10 +59,22 @@ function App() {
           </div>
         </section>
 
-        <section id="projects" className="space-y-3">
-          <h2 className="text-3xl font-bold">Submitted projects</h2>
-          <p className="text-white/70">
-          </p>
+        <section id="projects" className="py-24 border-t border-brand-border">
+          <div className="mb-12 text-center">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 font-sans text-white">Submitted projects</h2>
+            <p className="text-brand-muted font-mono">A showcase of our work.</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {PROJECTS.map((project, index) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                index={index}
+                onClick={() => {}}
+              />
+            ))}
+          </div>
         </section>
 
         <footer className="pt-10 border-t border-white/10 text-xs uppercase tracking-widest text-white/60">
