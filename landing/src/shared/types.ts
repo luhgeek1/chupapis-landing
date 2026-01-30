@@ -19,7 +19,7 @@ export interface TeamMember {
   bio: string;
   techStack: string[];
   experience: string;
-  projectsCount: number;
+  githubUrl: string;
   imagePlaceholderColor: string;
   imageSrc?: string;
 }

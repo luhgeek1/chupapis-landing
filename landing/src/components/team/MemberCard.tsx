@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { TeamMember } from '../../shared/types';
-import { Code, Briefcase, User } from 'lucide-react';
+import { Code, Briefcase, User, Github, ArrowUpRight } from 'lucide-react';
 
 interface MemberCardProps {
   member: TeamMember;
@@ -65,10 +65,19 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, index }) => {
                 <span className="block text-brand-muted text-xs uppercase tracking-wider">Experience</span>
                 <span className="block text-2xl font-bold font-mono text-white">{member.experience}</span>
             </div>
-            <div className="p-4 rounded-xl bg-brand-surface border border-brand-border">
-                <span className="block text-brand-muted text-xs uppercase tracking-wider">Projects</span>
-                <span className="block text-2xl font-bold font-mono text-white">{member.projectsCount}</span>
-            </div>
+            <a
+              href={member.githubUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="relative p-4 rounded-xl bg-brand-surface border border-brand-border hover:border-brand-accent hover:-translate-y-0.5 transition duration-300 flex flex-col gap-1 group"
+            >
+              <ArrowUpRight size={16} className="absolute top-3 right-3 text-brand-muted group-hover:text-brand-accent transition-colors" />
+              <span className="block text-brand-muted text-xs uppercase tracking-wider">GitHub</span>
+              <span className="flex items-center gap-2 text-2xl font-bold font-mono text-white leading-tight">
+                <Github size={22} className="text-white" />
+                Profile
+              </span>
+            </a>
         </div>
       </div>
     </motion.div>
