@@ -1,26 +1,112 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Terminal, Cpu, Coffee, Award, ArrowDown } from 'lucide-react';
 import Background3D from './components/background/Background';
 import MemberCard from './components/team/MemberCard';
 import ProjectCard from './components/projects/ProjectCard';
 import ProjectDetail from './components/projects/ProjectDetail';
-import { MEMBERS, PROJECTS, STATS, TEAM_DESCRIPTION, TEAM_NAME} from './shared/constants';
+import { MEMBERS, PROJECTS, STATS, TEAM_DESCRIPTION, TEAM_NAME } from './shared/constants';
 import { Project } from './shared/types';
 
+const getProjectFromUrl = (): Project | null => {
+  if (typeof window === 'undefined') return null;
+
+  const params = new URLSearchParams(window.location.search);
+  const projectParam = params.get('project');
+
+  if (!projectParam) return null;
+
+  const projectId = Number(projectParam);
+  if (Number.isNaN(projectId)) return null;
+
+  return PROJECTS.find((project) => project.id === projectId) ?? null;
+};
+
 function App() {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(() => getProjectFromUrl());
   const [isReturning, setIsReturning] = useState(false);
 
-  const handleProjectSelect = (project: Project) => {
+  const handleProjectSelect = useCallback((project: Project) => {
+    if (selectedProject?.id === project.id) return;
+
     setSelectedProject(project);
     setIsReturning(false);
-  };
 
-  const handleBack = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('project', String(project.id));
+    window.history.pushState({ projectId: project.id }, '', url);
+  }, [selectedProject]);
+
+  const handleBack = useCallback(() => {
+    const historyState = (window.history.state as { projectId?: number } | null);
+    const canUseBrowserBack = Boolean(historyState?.projectId);
+    const url = new URL(window.location.href);
+
+    if (canUseBrowserBack) {
+      window.history.back();
+      return;
+    }
+
+    if (url.searchParams.has('project')) {
+      url.searchParams.delete('project');
+      window.history.replaceState(null, '', url);
+    }
+
     setSelectedProject(null);
     setIsReturning(true);
-  };
+  }, []);
+
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      const stateProjectId = event.state && typeof event.state.projectId === 'number'
+        ? event.state.projectId
+        : null;
+      const queryParam = new URLSearchParams(window.location.search).get('project');
+      const projectIdFromQuery = queryParam ? Number(queryParam) : null;
+      const targetId = stateProjectId ?? projectIdFromQuery;
+      const nextProject = typeof targetId === 'number'
+        ? PROJECTS.find((project) => project.id === targetId) ?? null
+        : null;
+
+      if (nextProject) {
+        setSelectedProject(nextProject);
+        setIsReturning(false);
+      } else {
+        setSelectedProject(null);
+        setIsReturning(true);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowLeft' && selectedProject) {
+        event.preventDefault();
+        handleBack();
+      }
+
+      if (event.key === 'ArrowRight') {
+        if (selectedProject) {
+          const currentIndex = PROJECTS.findIndex((project) => project.id === selectedProject.id);
+          const nextProject = PROJECTS[currentIndex + 1];
+
+          if (nextProject) {
+            event.preventDefault();
+            handleProjectSelect(nextProject);
+          }
+        } else if (PROJECTS.length > 0) {
+          event.preventDefault();
+          handleProjectSelect(PROJECTS[0]);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedProject, handleBack, handleProjectSelect]);
 
   return (
     <div className="min-h-screen relative selection:bg-brand-accent selection:text-black">
