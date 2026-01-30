@@ -1,7 +1,8 @@
 import React from 'react';
 import { ArrowDown, Cpu, Terminal, Coffee } from 'lucide-react';
 import Background3D from './components/background/Background';
-import { TEAM_NAME, TEAM_DESCRIPTION, STATS } from './shared/constants';
+import MemberCard from './components/team/MemberCard';
+import { TEAM_NAME, TEAM_DESCRIPTION, STATS, MEMBERS } from './shared/constants';
 
 function App() {
   return (
@@ -41,6 +42,19 @@ function App() {
               <div className="text-2xl font-bold text-white">{STATS.coffeesConsumed}</div>
               <div className="text-xs uppercase tracking-wider text-white/60">Burgers eaten</div>
             </div>
+          </div>
+        </section>
+
+        <section className="py-24 border-t border-brand-border">
+          <div className="mb-16 text-center">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 font-sans text-white">The Builders</h2>
+            <p className="text-brand-muted font-mono">Precision in every line of code.</p>
+          </div>
+
+          <div className="max-w-5xl mx-auto">
+            {MEMBERS.map((member, index) => (
+              <MemberCard key={member.id} member={member} index={index} />
+            ))}
           </div>
         </section>
 
