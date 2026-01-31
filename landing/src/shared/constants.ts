@@ -6,6 +6,7 @@ const autoImage = new URL('../assets/auto.png', import.meta.url).href;
 const codeImage = new URL('../assets/code.png', import.meta.url).href;
 const bookImage = new URL('../assets/book.png', import.meta.url).href;
 const finImage = new URL('../assets/fin.png', import.meta.url).href;
+const financialVideo = `${import.meta.env.BASE_URL}finan.mp4`;
 const botImage = new URL('../assets/bot.png', import.meta.url).href;
 
 export const TEAM_NAME = "чупапис";
@@ -135,6 +136,7 @@ export const PROJECTS: Project[] = [
     tags: ["React", "Vite", "CSS", "JS", "FastAPI", "PostgreSQL", "Redis", "Docker", "Nginx"],
     imagePlaceholderColor: "bg-neutral-800",
     imageSrc: finImage,
+    videoSrc: financialVideo,
   },
 
   {

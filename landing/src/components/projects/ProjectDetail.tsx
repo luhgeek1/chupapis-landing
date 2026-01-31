@@ -13,6 +13,8 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
     window.scrollTo(0, 0);
   }, []);
 
+  const hasVideo = Boolean(project.videoSrc);
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -93,13 +95,32 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
 
            <div className="lg:col-span-7 flex flex-col gap-6">
               <div className="w-full aspect-video bg-brand-surface border border-brand-border rounded-xl overflow-hidden relative group">
-                 <div className="absolute inset-0 flex items-center justify-center">
-                    <Layers size={64} className="text-brand-muted/20 group-hover:text-brand-muted/40 transition-colors" />
-                 </div>
-                 <div className="absolute bottom-4 right-4 bg-black/50 px-3 py-1 rounded text-xs text-brand-muted font-mono">
-                    Main Interface View
-                 </div>
-                 {/* <img src="" className="w-full h-full object-cover" /> */}
+                 {hasVideo ? (
+                   <>
+                     <video
+                       key={project.videoSrc}
+                       src={project.videoSrc}
+                       autoPlay
+                       loop
+                       muted
+                       controls
+                       playsInline
+                       className="w-full h-full object-cover"
+                     />
+                     <div className="absolute bottom-4 right-4 bg-black/60 px-3 py-1 rounded text-xs text-white font-mono">
+                        Demo Video
+                     </div>
+                   </>
+                 ) : (
+                   <>
+                     <div className="absolute inset-0 flex items-center justify-center">
+                        <Layers size={64} className="text-brand-muted/20 group-hover:text-brand-muted/40 transition-colors" />
+                     </div>
+                     <div className="absolute bottom-4 right-4 bg-black/50 px-3 py-1 rounded text-xs text-brand-muted font-mono">
+                        Main Interface View
+                     </div>
+                   </>
+                 )}
               </div>
 
               <div className="w-full md:w-2/3 ml-auto aspect-[21/9] bg-brand-surface border border-brand-border rounded-xl overflow-hidden relative group">

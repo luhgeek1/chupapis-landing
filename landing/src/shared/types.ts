@@ -9,7 +9,8 @@ export interface Project {
   imageSrc?: string;
   techHighlights?: string[];
   githubUrl: string;
-  timeline:string;
+  timeline: string;
+  videoSrc?: string;
 }
 
 export interface TeamMember {
