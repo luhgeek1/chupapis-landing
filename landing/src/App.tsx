@@ -25,6 +25,7 @@ const getProjectFromUrl = (): Project | null => {
 function App() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(() => getProjectFromUrl());
   const [isReturning, setIsReturning] = useState(false);
+  const [isHeroVideoReady, setIsHeroVideoReady] = useState(false);
   const heroVideoSrc = `${import.meta.env.BASE_URL}hero1.MOV`;
 
   const handleProjectSelect = useCallback((project: Project) => {
@@ -140,7 +141,10 @@ function App() {
               className=""
             >
               <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-                <div className="absolute inset-0">
+                <div
+                  className="absolute inset-0 transition-opacity duration-700"
+                  style={{ opacity: isHeroVideoReady ? 1 : 0 }}
+                >
                   <video
                     className="w-full h-full object-cover pointer-events-none"
                     src={heroVideoSrc}
@@ -149,6 +153,8 @@ function App() {
                     loop
                     playsInline
                     preload="auto"
+                    onCanPlay={() => setIsHeroVideoReady(true)}
+                    onLoadedData={() => setIsHeroVideoReady(true)}
                   />
                   <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/50 to-black/70" />
                 </div>
