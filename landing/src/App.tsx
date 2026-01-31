@@ -25,6 +25,7 @@ const getProjectFromUrl = (): Project | null => {
 function App() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(() => getProjectFromUrl());
   const [isReturning, setIsReturning] = useState(false);
+  const heroVideoSrc = `${import.meta.env.BASE_URL}hero1.MOV`;
 
   const handleProjectSelect = useCallback((project: Project) => {
     if (selectedProject?.id === project.id) return;
@@ -136,34 +137,51 @@ function App() {
                   setIsReturning(false);
                 }
               }}
-              className="container mx-auto px-6"
+              className=""
             >
-              <section className="min-h-screen flex flex-col justify-center items-center text-center pt-20">
+              <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+                <div className="absolute inset-0">
+                  <video
+                    className="w-full h-full object-cover pointer-events-none"
+                    src={heroVideoSrc}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="auto"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/50 to-black/70" />
+                </div>
+
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8 }}
+                  className="relative z-10 w-full px-6"
                 >
+                  <div className="container mx-auto flex flex-col items-center text-center gap-6">
+                    <h1 className="text-7xl md:text-9xl font-bold font-sans tracking-tighter text-white">
+                      {TEAM_NAME}
+                    </h1>
+                    
+                    <p className="text-xl md:text-2xl text-brand-muted font-mono max-w-2xl mx-auto font-light">
+                      Fame hustlers
+                    </p>
 
-                  <h1 className="text-7xl md:text-9xl font-bold font-sans tracking-tighter mb-6 text-white">
-                    {TEAM_NAME}
-                  </h1>
-                  
-                  <p className="text-xl md:text-2xl text-brand-muted font-mono max-w-2xl mx-auto mb-12 font-light">
-                    Fame hustlers
-                  </p>
-
-                  <motion.a 
-                    href="#about"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="inline-flex items-center gap-3 bg-white text-black border border-white px-8 py-3 rounded-full font-bold hover:bg-black hover:text-white transition-all duration-300"
-                  >
-                    Meet the Team <ArrowDown size={18} />
-                  </motion.a>
+                    <motion.a 
+                      href="#about"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="inline-flex items-center gap-3 bg-white text-black border border-white px-8 py-3 rounded-full font-bold hover:bg-black hover:text-white transition-all duration-300"
+                    >
+                      Meet the Team <ArrowDown size={18} />
+                    </motion.a>
+                  </div>
                 </motion.div>
               </section>
-<section id="about" className="py-24">
+
+              <div className="container mx-auto px-6">
+              <section id="about" className="py-24">
                   <motion.div 
                       initial={{ opacity: 0 }}
                       whileInView={{ opacity: 1 }}
@@ -236,6 +254,7 @@ function App() {
               <footer className="py-12 border-t border-brand-border text-center text-brand-muted font-mono text-xs uppercase tracking-wider">
                   <p>&copy; {new Date().getFullYear()} {TEAM_NAME}</p>
               </footer>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
