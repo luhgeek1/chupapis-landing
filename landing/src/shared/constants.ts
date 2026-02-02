@@ -10,6 +10,7 @@ const finImage = new URL('../assets/fin.png', import.meta.url).href;
 const bookVideo = `${import.meta.env.BASE_URL}books.mp4`;
 const financialVideo = `${import.meta.env.BASE_URL}finan.mp4`;
 const botImage = new URL('../assets/bot.png', import.meta.url).href;
+const chupapisVideo = `${import.meta.env.BASE_URL}Chupapis.mov`;
 
 export const TEAM_NAME = "чупапис";
 export const TEAM_DESCRIPTION = "Мы — команда из двух разработчиков: frontend и backend. Уже больше двух лет мы работаем вместе и за это время успели реализовать несколько масштабных проектов. На Олимпиаде Prod мы делаем веб-продукт под ключ: React на фронте и Python на бэке — с упором на качество, архитектуру и скорость.";
@@ -76,6 +77,8 @@ export const PROJECTS: Project[] = [
     tags: ["React", "Vite", "Tailwind", "TS", "FastAPI", "PostgreSQL", "Redis", "Docker", "Nginx"],
     imagePlaceholderColor: "bg-neutral-900",
     imageSrc: codeImage,
+    detailImageSrc: codeImage,
+    detailVideoSrc: chupapisVideo,
   },
 
   {

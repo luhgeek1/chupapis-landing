@@ -12,6 +12,7 @@ export interface Project {
   githubUrl: string;
   timeline: string;
   videoSrc?: string;
+  detailVideoSrc?: string;
 }
 
 export interface TeamMember {
