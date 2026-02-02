@@ -7,6 +7,7 @@ export interface Project {
   tags: string[];
   imagePlaceholderColor: string;
   imageSrc?: string;
+  detailImageSrc?: string;
   techHighlights?: string[];
   githubUrl: string;
   timeline: string;

@@ -14,6 +14,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
   }, []);
 
   const hasVideo = Boolean(project.videoSrc);
+  const hasDetailImage = Boolean(project.detailImageSrc);
 
   return (
     <motion.div
@@ -123,14 +124,29 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
                  )}
               </div>
 
-              <div className="w-full md:w-2/3 ml-auto aspect-[21/9] bg-brand-surface border border-brand-border rounded-xl overflow-hidden relative group">
-                 <div className="absolute inset-0 flex items-center justify-center">
-                    <Layers size={48} className="text-brand-muted/20 group-hover:text-brand-muted/40 transition-colors" />
-                 </div>
-                 <div className="absolute bottom-4 right-4 bg-black/50 px-3 py-1 rounded text-xs text-brand-muted font-mono">
-
-                 </div>
-                 {/* <img src="" className="w-full h-full object-cover" /> */}
+              <div className="w-full aspect-video bg-brand-surface border border-brand-border rounded-xl overflow-hidden relative group">
+                 {hasDetailImage ? (
+                   <>
+                     <img
+                       src={project.detailImageSrc}
+                       alt={`${project.title} detailed screen`}
+                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                     />
+                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
+                     <div className="absolute bottom-4 right-4 bg-black/60 px-3 py-1 rounded text-xs text-white font-mono">
+                       Product Screen
+                     </div>
+                   </>
+                 ) : (
+                   <>
+                     <div className="absolute inset-0 flex items-center justify-center">
+                        <Layers size={48} className="text-brand-muted/20 group-hover:text-brand-muted/40 transition-colors" />
+                     </div>
+                     <div className="absolute bottom-4 right-4 bg-black/50 px-3 py-1 rounded text-xs text-brand-muted font-mono">
+                        Additional View
+                     </div>
+                   </>
+                 )}
               </div>
            </div>
         </div>

@@ -5,7 +5,9 @@ const MarksPhoto = new URL('../assets/Mark.PNG', import.meta.url).href;
 const autoImage = new URL('../assets/auto.png', import.meta.url).href;
 const codeImage = new URL('../assets/code.png', import.meta.url).href;
 const bookImage = new URL('../assets/book.png', import.meta.url).href;
+const bookDetailImage = new URL('../assets/booksprof.png', import.meta.url).href;
 const finImage = new URL('../assets/fin.png', import.meta.url).href;
+const bookVideo = `${import.meta.env.BASE_URL}books.mp4`;
 const financialVideo = `${import.meta.env.BASE_URL}finan.mp4`;
 const botImage = new URL('../assets/bot.png', import.meta.url).href;
 
@@ -24,7 +26,7 @@ export const MEMBERS: TeamMember[] = [
 	    name: "Stephan", 
 	    role: "Frontend",
 	    bio: "Да я фронтендер и что. Делаю быстрые и аккуратные интерфейсы, уделяю внимание UX и визуальным деталям. Основной стек — React + TypeScript + Tailwind. Для хакатонов и MVP быстро собираю UI на shadcn/ui, добавляю анимации через Framer Motion, а для параллельной разработки использую Prism.",
-	    techStack: ["React", "TypeScript", "Vite", "Docker", "Tailwind CSS", "Shadcn", "Motion", "Prism", "Netlify"],
+	    techStack: ["React", "TypeScript", "Vite", "TanStack Query", "React Router", "Docker", "Tailwind CSS", "Shadcn", "Motion", "Prism", "Netlify"],
 	    experience: "2 Years",
 	    githubUrl: "https://github.com/luhgeek1",
 	    imagePlaceholderColor: "from-zinc-800 to-zinc-900",
@@ -70,7 +72,7 @@ export const PROJECTS: Project[] = [
     ],
     timeline: "⏱ 2 дня",
     githubUrl: "https://github.com/laughinme/CodeMetrics",
-    link: "https://github.com/laughinme/CodeMetrics",
+    link: "https://codemetr1cs.netlify.app",
     tags: ["React", "Vite", "Tailwind", "TS", "FastAPI", "PostgreSQL", "Redis", "Docker", "Nginx"],
     imagePlaceholderColor: "bg-neutral-900",
     imageSrc: codeImage,
@@ -115,6 +117,8 @@ export const PROJECTS: Project[] = [
     tags: ["React", "Vite", "Tailwind", "JS", "FastAPI", "PostgreSQL", "Redis", "Nginx"],
     imagePlaceholderColor: "bg-stone-900",
     imageSrc: bookImage,
+    detailImageSrc: bookDetailImage,
+    videoSrc: bookVideo,
   },
 
   {
