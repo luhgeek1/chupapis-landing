@@ -7,6 +7,7 @@ const codeImage = new URL('../assets/code.png', import.meta.url).href;
 const bookImage = new URL('../assets/book.png', import.meta.url).href;
 const bookDetailImage = new URL('../assets/booksprof.png', import.meta.url).href;
 const finImage = new URL('../assets/fin.png', import.meta.url).href;
+const financialDetailImage = new URL('../assets/fw1.jpg', import.meta.url).href;
 const bookVideo = `${import.meta.env.BASE_URL}books.mp4`;
 const codeVideo = `${import.meta.env.BASE_URL}code.mp4`;
 const financialVideo = `${import.meta.env.BASE_URL}finan.mp4`;
@@ -145,6 +146,7 @@ export const PROJECTS: Project[] = [
     tags: ["React", "Vite", "CSS", "JS", "FastAPI", "PostgreSQL", "Redis", "Docker", "Nginx"],
     imagePlaceholderColor: "bg-neutral-800",
     imageSrc: finImage,
+    detailImageSrc: financialDetailImage,
     videoSrc: financialVideo,
   },
 
