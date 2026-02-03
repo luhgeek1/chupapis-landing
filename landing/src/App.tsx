@@ -7,6 +7,7 @@ import ProjectCard from './components/projects/ProjectCard';
 import ProjectDetail from './components/projects/ProjectDetail';
 import { MEMBERS, PROJECTS, STATS, TEAM_DESCRIPTION, TEAM_NAME } from './shared/constants';
 import { Project } from './shared/types';
+import { useDeferredMedia } from './shared/hooks/useDeferredMedia';
 
 const getProjectFromUrl = (): Project | null => {
   if (typeof window === 'undefined') return null;
@@ -26,7 +27,8 @@ function App() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(() => getProjectFromUrl());
   const [isReturning, setIsReturning] = useState(false);
   const [isHeroVideoReady, setIsHeroVideoReady] = useState(false);
-  const heroVideoSrc = `${import.meta.env.BASE_URL}hero1.MOV`;
+  const mediaReady = useDeferredMedia(800);
+  const heroVideoSrc = mediaReady ? `${import.meta.env.BASE_URL}hero1.MOV` : undefined;
 
   const handleProjectSelect = useCallback((project: Project) => {
     if (selectedProject?.id === project.id) return;
@@ -120,7 +122,8 @@ function App() {
             <ProjectDetail 
               key="project-detail" 
               project={selectedProject} 
-              onBack={handleBack} 
+              onBack={handleBack}
+              mediaReady={mediaReady}
             />
           ) : (
             <motion.div
@@ -143,19 +146,23 @@ function App() {
               <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
                 <div
                   className="absolute inset-0 transition-opacity duration-700"
-                  style={{ opacity: isHeroVideoReady ? 1 : 0 }}
+                  style={{ opacity: heroVideoSrc ? (isHeroVideoReady ? 1 : 0) : 1 }}
                 >
-                  <video
-                    className="w-full h-full object-cover pointer-events-none"
-                    src={heroVideoSrc}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="auto"
-                    onCanPlay={() => setIsHeroVideoReady(true)}
-                    onLoadedData={() => setIsHeroVideoReady(true)}
-                  />
+                  {heroVideoSrc ? (
+                    <video
+                      className="w-full h-full object-cover pointer-events-none"
+                      src={heroVideoSrc}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="auto"
+                      onCanPlay={() => setIsHeroVideoReady(true)}
+                      onLoadedData={() => setIsHeroVideoReady(true)}
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-b from-black via-black/70 to-black" />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/50 to-black/70" />
                 </div>
 
@@ -228,7 +235,12 @@ function App() {
                   
                   <div className="max-w-5xl mx-auto">
                       {MEMBERS.map((member, index) => (
-                          <MemberCard key={member.id} member={member} index={index} />
+                          <MemberCard
+                            key={member.id}
+                            member={member}
+                            index={index}
+                            mediaReady={mediaReady}
+                          />
                       ))}
                   </div>
               </section>
@@ -252,6 +264,7 @@ function App() {
                             project={project} 
                             index={index} 
                             onClick={handleProjectSelect}
+                            mediaReady={mediaReady}
                           />
                       ))}
                   </div>

@@ -6,10 +6,12 @@ import { Code, Briefcase, User, Github, ArrowUpRight } from 'lucide-react';
 interface MemberCardProps {
   member: TeamMember;
   index: number;
+  mediaReady: boolean;
 }
 
-const MemberCard: React.FC<MemberCardProps> = ({ member, index }) => {
+const MemberCard: React.FC<MemberCardProps> = ({ member, index, mediaReady }) => {
   const isEven = index % 2 === 0;
+  const imageSrc = mediaReady ? member.imageSrc : undefined;
 
   return (
     <motion.div
@@ -22,8 +24,14 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, index }) => {
       <div className="w-full lg:w-1/2 relative group">
         <div className={`absolute -inset-1 bg-gradient-to-r ${member.imagePlaceholderColor} rounded-2xl blur opacity-0 group-hover:opacity-40 transition duration-500`}></div>
         <div className="relative aspect-square rounded-2xl bg-brand-surface border border-brand-border overflow-hidden flex items-center justify-center group-hover:border-brand-accent/30 transition-colors duration-500">
-            {member.imageSrc ? (
-              <img src={member.imageSrc} alt={member.name} className="w-full h-full object-cover " />
+            {imageSrc ? (
+              <img
+                src={imageSrc}
+                alt={member.name}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover "
+              />
             ) : (
               <div className="text-center p-6 text-brand-muted">
                   <User size={64} className="mx-auto mb-4 opacity-50" />

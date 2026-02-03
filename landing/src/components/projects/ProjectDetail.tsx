@@ -6,9 +6,10 @@ import { Project } from '../../shared/types';
 interface ProjectDetailProps {
   project: Project;
   onBack: () => void;
+  mediaReady: boolean;
 }
 
-const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
+const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, mediaReady }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -16,6 +17,9 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
   const hasVideo = Boolean(project.videoSrc);
   const hasDetailImage = Boolean(project.detailImageSrc);
   const hasDetailVideo = Boolean(project.detailVideoSrc);
+  const mainVideoSrc = mediaReady ? project.videoSrc : undefined;
+  const detailVideoSrc = mediaReady ? project.detailVideoSrc : undefined;
+  const detailImageSrc = mediaReady ? project.detailImageSrc : undefined;
 
   return (
     <motion.div
@@ -97,16 +101,17 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
 
            <div className="lg:col-span-7 flex flex-col gap-6">
               <div className="w-full aspect-video bg-brand-surface border border-brand-border rounded-xl overflow-hidden relative group">
-                 {hasVideo ? (
+                 {mainVideoSrc ? (
                    <>
                      <video
-                       key={project.videoSrc}
-                       src={project.videoSrc}
+                       key={mainVideoSrc}
+                       src={mainVideoSrc}
                        autoPlay
                        loop
                        muted
                        controls
                        playsInline
+                       preload="metadata"
                        className="w-full h-full object-cover"
                      />
                      <div className="absolute bottom-4 right-4 bg-black/60 px-3 py-1 rounded text-xs text-white font-mono">
@@ -117,36 +122,39 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
                    <>
                      <div className="absolute inset-0 flex items-center justify-center">
                         <Layers size={64} className="text-brand-muted/20 group-hover:text-brand-muted/40 transition-colors" />
-                     </div>
+                      </div>
                      <div className="absolute bottom-4 right-4 bg-black/50 px-3 py-1 rounded text-xs text-brand-muted font-mono">
-                        Main Interface View
-                     </div>
+                        {hasVideo ? 'Loading video...' : 'Main Interface View'}
+                      </div>
                    </>
                  )}
               </div>
 
               <div className="w-full aspect-video bg-brand-surface border border-brand-border rounded-xl overflow-hidden relative group">
-                {hasDetailVideo ? (
+                {detailVideoSrc ? (
                   <>
                     <video
-                      key={project.detailVideoSrc}
-                      src={project.detailVideoSrc}
+                      key={detailVideoSrc}
+                      src={detailVideoSrc}
                       autoPlay
                       loop
                       muted
                       controls
                       playsInline
+                      preload="metadata"
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute bottom-4 right-4 bg-black/60 px-3 py-1 rounded text-xs text-white font-mono">
                       Product Screen
                     </div>
                   </>
-                ) : hasDetailImage ? (
+                ) : detailImageSrc ? (
                   <>
                     <img
-                      src={project.detailImageSrc}
+                      src={detailImageSrc}
                       alt={`${project.title} detailed screen`}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />

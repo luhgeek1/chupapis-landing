@@ -8,6 +8,7 @@ const bookImage = new URL('../assets/book.png', import.meta.url).href;
 const bookDetailImage = new URL('../assets/booksprof.png', import.meta.url).href;
 const finImage = new URL('../assets/fin.png', import.meta.url).href;
 const bookVideo = `${import.meta.env.BASE_URL}books.mp4`;
+const codeVideo = `${import.meta.env.BASE_URL}code.mp4`;
 const financialVideo = `${import.meta.env.BASE_URL}finan.mp4`;
 const botImage = new URL('../assets/bot.png', import.meta.url).href;
 const chupapisVideo = `${import.meta.env.BASE_URL}Chupapis.mov`;
@@ -79,6 +80,7 @@ export const PROJECTS: Project[] = [
     imageSrc: codeImage,
     detailImageSrc: codeImage,
     detailVideoSrc: chupapisVideo,
+    videoSrc: codeVideo,
   },
 
   {
