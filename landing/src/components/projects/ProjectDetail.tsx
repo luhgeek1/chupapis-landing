@@ -27,7 +27,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, mediaRea
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen pt-24 pb-12"
+      className="min-h-[100svh] pt-24 pb-12"
     >
       <div className="container mx-auto px-6 max-w-6xl">
         <button 

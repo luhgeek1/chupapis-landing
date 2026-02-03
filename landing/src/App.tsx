@@ -113,7 +113,7 @@ function App() {
   }, [selectedProject, handleBack, handleProjectSelect]);
 
   return (
-    <div className="min-h-screen relative selection:bg-brand-accent selection:text-black">
+    <div className="min-h-[100svh] relative selection:bg-brand-accent selection:text-black">
       <Background3D />
 
       <main className="relative z-10">
@@ -143,7 +143,7 @@ function App() {
               }}
               className=""
             >
-              <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+              <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden pt-20">
                 <div
                   className="absolute inset-0 transition-opacity duration-700"
                   style={{ opacity: heroVideoSrc ? (isHeroVideoReady ? 1 : 0) : 1 }}
