@@ -1,29 +1,119 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Terminal, Cpu, Coffee, Award, ArrowDown } from 'lucide-react';
 import Background3D from './components/background/Background';
 import MemberCard from './components/team/MemberCard';
 import ProjectCard from './components/projects/ProjectCard';
 import ProjectDetail from './components/projects/ProjectDetail';
-import { MEMBERS, PROJECTS, STATS, TEAM_DESCRIPTION, TEAM_NAME} from './shared/constants';
+import { MEMBERS, PROJECTS, STATS, TEAM_DESCRIPTION, TEAM_NAME } from './shared/constants';
 import { Project } from './shared/types';
+import { useDeferredMedia } from './shared/hooks/useDeferredMedia';
+
+const getProjectFromUrl = (): Project | null => {
+  if (typeof window === 'undefined') return null;
+
+  const params = new URLSearchParams(window.location.search);
+  const projectParam = params.get('project');
+
+  if (!projectParam) return null;
+
+  const projectId = Number(projectParam);
+  if (Number.isNaN(projectId)) return null;
+
+  return PROJECTS.find((project) => project.id === projectId) ?? null;
+};
 
 function App() {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(() => getProjectFromUrl());
   const [isReturning, setIsReturning] = useState(false);
+  const [isHeroVideoReady, setIsHeroVideoReady] = useState(false);
+  const mediaReady = useDeferredMedia(800);
+  const heroVideoSrc = mediaReady ? `${import.meta.env.BASE_URL}hero1.MOV` : undefined;
 
-  const handleProjectSelect = (project: Project) => {
+  const handleProjectSelect = useCallback((project: Project) => {
+    if (selectedProject?.id === project.id) return;
+
     setSelectedProject(project);
     setIsReturning(false);
-  };
 
-  const handleBack = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('project', String(project.id));
+    window.history.pushState({ projectId: project.id }, '', url);
+  }, [selectedProject]);
+
+  const handleBack = useCallback(() => {
+    const historyState = (window.history.state as { projectId?: number } | null);
+    const canUseBrowserBack = Boolean(historyState?.projectId);
+    const url = new URL(window.location.href);
+
+    if (canUseBrowserBack) {
+      window.history.back();
+      return;
+    }
+
+    if (url.searchParams.has('project')) {
+      url.searchParams.delete('project');
+      window.history.replaceState(null, '', url);
+    }
+
     setSelectedProject(null);
     setIsReturning(true);
-  };
+  }, []);
+
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      const stateProjectId = event.state && typeof event.state.projectId === 'number'
+        ? event.state.projectId
+        : null;
+      const queryParam = new URLSearchParams(window.location.search).get('project');
+      const projectIdFromQuery = queryParam ? Number(queryParam) : null;
+      const targetId = stateProjectId ?? projectIdFromQuery;
+      const nextProject = typeof targetId === 'number'
+        ? PROJECTS.find((project) => project.id === targetId) ?? null
+        : null;
+
+      if (nextProject) {
+        setSelectedProject(nextProject);
+        setIsReturning(false);
+      } else {
+        setSelectedProject(null);
+        setIsReturning(true);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowLeft' && selectedProject) {
+        event.preventDefault();
+        handleBack();
+      }
+
+      if (event.key === 'ArrowRight') {
+        if (selectedProject) {
+          const currentIndex = PROJECTS.findIndex((project) => project.id === selectedProject.id);
+          const nextProject = PROJECTS[currentIndex + 1];
+
+          if (nextProject) {
+            event.preventDefault();
+            handleProjectSelect(nextProject);
+          }
+        } else if (PROJECTS.length > 0) {
+          event.preventDefault();
+          handleProjectSelect(PROJECTS[0]);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedProject, handleBack, handleProjectSelect]);
 
   return (
-    <div className="min-h-screen relative selection:bg-brand-accent selection:text-black">
+    <div className="min-h-[100svh] relative selection:bg-brand-accent selection:text-black">
       <Background3D />
 
       <main className="relative z-10">
@@ -32,7 +122,8 @@ function App() {
             <ProjectDetail 
               key="project-detail" 
               project={selectedProject} 
-              onBack={handleBack} 
+              onBack={handleBack}
+              mediaReady={mediaReady}
             />
           ) : (
             <motion.div
@@ -50,37 +141,60 @@ function App() {
                   setIsReturning(false);
                 }
               }}
-              className="container mx-auto px-6"
+              className=""
             >
-              <section className="min-h-screen flex flex-col justify-center items-center text-center pt-20">
+              <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden pt-20">
+                <div
+                  className="absolute inset-0 transition-opacity duration-700"
+                  style={{ opacity: heroVideoSrc ? (isHeroVideoReady ? 1 : 0) : 1 }}
+                >
+                  {heroVideoSrc ? (
+                    <video
+                      className="w-full h-full object-cover pointer-events-none"
+                      src={heroVideoSrc}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="auto"
+                      onCanPlay={() => setIsHeroVideoReady(true)}
+                      onLoadedData={() => setIsHeroVideoReady(true)}
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-b from-black via-black/70 to-black" />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/50 to-black/70" />
+                </div>
+
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8 }}
+                  className="relative z-10 w-full px-6"
                 >
-                  <div className="inline-block px-4 py-1.5 mb-8 border border-white/20 rounded-full bg-white/5 backdrop-blur-sm">
-                    <span className="text-white font-mono text-xs uppercase tracking-[0.2em]">by вайбкодер's</span>
-                  </div>
-                  
-                  <h1 className="text-7xl md:text-9xl font-bold font-sans tracking-tighter mb-6 text-white">
-                    {TEAM_NAME}
-                  </h1>
-                  
-                  <p className="text-xl md:text-2xl text-brand-muted font-mono max-w-2xl mx-auto mb-12 font-light">
-                    Fame hustlers
-                  </p>
+                  <div className="container mx-auto flex flex-col items-center text-center gap-6">
+                    <h1 className="text-7xl md:text-9xl font-bold font-sans tracking-tighter text-white">
+                      {TEAM_NAME}
+                    </h1>
+                    
+                    <p className="text-xl md:text-2xl text-brand-muted font-mono max-w-2xl mx-auto font-light">
+                      Fame hustlers
+                    </p>
 
-                  <motion.a 
-                    href="#about"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="inline-flex items-center gap-3 bg-white text-black border border-white px-8 py-3 rounded-full font-bold hover:bg-black hover:text-white transition-all duration-300"
-                  >
-                    Meet the Team <ArrowDown size={18} />
-                  </motion.a>
+                    <motion.a 
+                      href="#about"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="inline-flex items-center gap-3 bg-white text-black border border-white px-8 py-3 rounded-full font-bold hover:bg-black hover:text-white transition-all duration-300"
+                    >
+                      Meet the Team <ArrowDown size={18} />
+                    </motion.a>
+                  </div>
                 </motion.div>
               </section>
-<section id="about" className="py-24">
+
+              <div className="container mx-auto px-6">
+              <section id="about" className="py-24">
                   <motion.div 
                       initial={{ opacity: 0 }}
                       whileInView={{ opacity: 1 }}
@@ -121,7 +235,12 @@ function App() {
                   
                   <div className="max-w-5xl mx-auto">
                       {MEMBERS.map((member, index) => (
-                          <MemberCard key={member.id} member={member} index={index} />
+                          <MemberCard
+                            key={member.id}
+                            member={member}
+                            index={index}
+                            mediaReady={mediaReady}
+                          />
                       ))}
                   </div>
               </section>
@@ -145,6 +264,7 @@ function App() {
                             project={project} 
                             index={index} 
                             onClick={handleProjectSelect}
+                            mediaReady={mediaReady}
                           />
                       ))}
                   </div>
@@ -153,6 +273,7 @@ function App() {
               <footer className="py-12 border-t border-brand-border text-center text-brand-muted font-mono text-xs uppercase tracking-wider">
                   <p>&copy; {new Date().getFullYear()} {TEAM_NAME}</p>
               </footer>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

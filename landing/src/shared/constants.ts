@@ -3,10 +3,19 @@ import { Project, TeamMember, TeamStats } from './types';
 const stepanPhoto = new URL('../assets/Step.png', import.meta.url).href;
 const MarksPhoto = new URL('../assets/Mark.PNG', import.meta.url).href;
 const autoImage = new URL('../assets/auto.png', import.meta.url).href;
+const autoVideo2 = `${import.meta.env.BASE_URL}auto2.mov`;
+const stripeImage = new URL('../assets/stripe.jpg', import.meta.url).href;
 const codeImage = new URL('../assets/code.png', import.meta.url).href;
 const bookImage = new URL('../assets/book.png', import.meta.url).href;
+const bookDetailImage = new URL('../assets/booksprof.png', import.meta.url).href;
 const finImage = new URL('../assets/fin.png', import.meta.url).href;
+const financialDetailImage = new URL('../assets/fw1.jpg', import.meta.url).href;
+const bookVideo = `${import.meta.env.BASE_URL}books.mp4`;
+const codeVideo = `${import.meta.env.BASE_URL}code.mp4`;
+const financialVideo = `${import.meta.env.BASE_URL}finan.mp4`;
 const botImage = new URL('../assets/bot.png', import.meta.url).href;
+const chupapisVideo = `${import.meta.env.BASE_URL}Chupapis.mov`;
+const botVideo = `${import.meta.env.BASE_URL}bot.mov`;
 
 export const TEAM_NAME = "чупапис";
 export const TEAM_DESCRIPTION = "Мы — команда из двух разработчиков: frontend и backend. Уже больше двух лет мы работаем вместе и за это время успели реализовать несколько масштабных проектов. На Олимпиаде Prod мы делаем веб-продукт под ключ: React на фронте и Python на бэке — с упором на качество, архитектуру и скорость.";
@@ -23,9 +32,9 @@ export const MEMBERS: TeamMember[] = [
 	    name: "Stephan", 
 	    role: "Frontend",
 	    bio: "Да я фронтендер и что. Делаю быстрые и аккуратные интерфейсы, уделяю внимание UX и визуальным деталям. Основной стек — React + TypeScript + Tailwind. Для хакатонов и MVP быстро собираю UI на shadcn/ui, добавляю анимации через Framer Motion, а для параллельной разработки использую Prism.",
-	    techStack: ["React", "TypeScript", "Vite", "Docker", "Tailwind CSS", "Shadcn", "Motion", "Prism", "Netlify"],
+	    techStack: ["React", "TypeScript", "Vite", "TanStack Query", "React Router", "Docker", "Tailwind CSS", "Shadcn", "Motion", "Prism", "Netlify"],
 	    experience: "2 Years",
-	    projectsCount: 9,
+	    githubUrl: "https://github.com/luhgeek1",
 	    imagePlaceholderColor: "from-zinc-800 to-zinc-900",
 	    imageSrc: stepanPhoto,
 	  },
@@ -47,7 +56,7 @@ export const MEMBERS: TeamMember[] = [
     "CI/CD",
   ],
      experience: "3 Years",
-     projectsCount: 9,
+     githubUrl: "https://github.com/laughinme",
      imagePlaceholderColor: "from-zinc-800 to-zinc-900",
      imageSrc: MarksPhoto,
    },
@@ -68,11 +77,15 @@ export const PROJECTS: Project[] = [
       "Инфра: Docker Compose + Nginx (reverse proxy)",
     ],
     timeline: "⏱ 2 дня",
-    type: "web dashboard",
-    link: "https://github.com/laughinme/CodeMetrics",
+    githubUrl: "https://github.com/laughinme/CodeMetrics",
+    link: "https://code-metrics-psi.vercel.app/",
     tags: ["React", "Vite", "Tailwind", "TS", "FastAPI", "PostgreSQL", "Redis", "Docker", "Nginx"],
     imagePlaceholderColor: "bg-neutral-900",
     imageSrc: codeImage,
+    detailImageSrc: codeImage,
+    detailVideoSrc: chupapisVideo,
+    detailMediaLabel: "Flawlёss Moment",
+    videoSrc: codeVideo,
   },
 
   {
@@ -81,7 +94,7 @@ export const PROJECTS: Project[] = [
     description:
       "Монорепо под продукт в домене автозапчастей: backend + frontend + mobile в единой структуре.",
     longDescription:
-      "AutoSpareParts — флагманский full-stack проект: маркетплейс для размещения и продажи автозапчастей, который вырос из идеи потенциального бизнес-продукта. Здесь много сложной доменной логики на бэкенде и “большая” архитектура, поэтому проект ощущается как настоящий продакшн-кандидат, а не учебный прототип. Над веб-частью работали два человека, параллельно команда из двух разработчиков делала интерфейс для Android-приложения. Отдельно выделяется платежная часть — подключена интеграция со Stripe",
+      "AutoSpareParts — флагманский full-stack проект: маркетплейс для размещения и продажи автозапчастей, который вырос из идеи потенциального бизнес-продукта. Здесь много сложной доменной логики на бэкенде и “большая” архитектура, поэтому проект ощущается как настоящий продакшн-кандидат, а не учебный прототип. Над веб-частью работали два человека, параллельно команда из двух разработчиков делала интерфейс для Android-приложения. Отдельно выделяется платежная часть — подключена интеграция со Stripe. Проект еще в разработке.",
     techHighlights: [
       "Монорепо структура: backend / frontend / mobile",
       "Есть docker-compose.yml для поднятия окружения локально",
@@ -89,11 +102,13 @@ export const PROJECTS: Project[] = [
       "Разные клиенты/слои — удобно развивать параллельно",
     ],
     timeline: "⏱ 3 недели",
-    type: "web + app",
-    link: "https://github.com/laughinme/auto-spare-parts",
+    githubUrl: "https://github.com/laughinme/auto-spare-parts",
+    link: "https://auto-spare-parts-gules.vercel.app/",
     tags: ["React", "Vite", "Tailwind", "TS", "FastAPI", "PostgreSQL", "Redis", "Nginx"],
     imagePlaceholderColor: "bg-zinc-900",
     imageSrc: autoImage,
+    videoSrc: autoVideo2,
+    detailImageSrc: stripeImage,
   },
 
   {
@@ -109,11 +124,13 @@ export const PROJECTS: Project[] = [
       "База под процессы разработки: папка .github/workflows (CI/автоматизации)",
     ],
     timeline: "⏱ 4 дня",
-    type: "web + app",
-    link: "https://github.com/laughinme/hackathon",
+    githubUrl: "https://github.com/laughinme/hackathon",
+    link: "https://books-exchange.vercel.app/",
     tags: ["React", "Vite", "Tailwind", "JS", "FastAPI", "PostgreSQL", "Redis", "Nginx"],
     imagePlaceholderColor: "bg-stone-900",
     imageSrc: bookImage,
+    detailImageSrc: bookDetailImage,
+    videoSrc: bookVideo,
   },
 
   {
@@ -130,11 +147,13 @@ export const PROJECTS: Project[] = [
       "Запуск окружения через Docker Compose",
     ],
     timeline: "⏱ 2 недели",
-    type: "web dashboard",
+    githubUrl: "https://github.com/laughinme/financial-work",
     link: "https://github.com/laughinme/financial-work",
     tags: ["React", "Vite", "CSS", "JS", "FastAPI", "PostgreSQL", "Redis", "Docker", "Nginx"],
     imagePlaceholderColor: "bg-neutral-800",
     imageSrc: finImage,
+    detailImageSrc: financialDetailImage,
+    videoSrc: financialVideo,
   },
 
   {
@@ -152,10 +171,13 @@ export const PROJECTS: Project[] = [
       "Env-конфиги: BOT_TOKEN, admin_id, опционально OPENAI_API_KEY",
     ],
     timeline: "⏱ a lot",
-    type: "telegram bot",
-    link: "https://github.com/laughinme/helpus3",
+    githubUrl: "https://github.com/laughinme/helpus3",
+    link: "https://t.me/helputils_bot",
     tags: ["Python", "Telegram Bot", "aiogram", "Parsing", "Notifications"],
     imagePlaceholderColor: "bg-zinc-800",
     imageSrc: botImage,
+    videoSrc: botVideo,
+    hideSecondaryMedia: true,
+    videoAspectRatio: "641 / 448",
   },
 ];

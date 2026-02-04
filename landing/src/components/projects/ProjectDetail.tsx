@@ -1,17 +1,28 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ExternalLink, Calendar, Layers } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Calendar, Layers,Github, ArrowUpRight } from 'lucide-react';
 import { Project } from '../../shared/types';
 
 interface ProjectDetailProps {
   project: Project;
   onBack: () => void;
+  mediaReady: boolean;
 }
 
-const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
+const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, mediaReady }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const hasVideo = Boolean(project.videoSrc);
+  const hasDetailImage = Boolean(project.detailImageSrc);
+  const hasDetailVideo = Boolean(project.detailVideoSrc);
+  const mainVideoSrc = mediaReady ? project.videoSrc : undefined;
+  const detailVideoSrc = mediaReady ? project.detailVideoSrc : undefined;
+  const detailImageSrc = mediaReady ? project.detailImageSrc : undefined;
+  const showSecondaryMedia = !project.hideSecondaryMedia;
+  const mainMediaAspectRatio = project.videoAspectRatio;
+  const detailMediaLabel = project.detailMediaLabel ?? 'Product Screen';
 
   return (
     <motion.div
@@ -19,7 +30,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen pt-24 pb-12"
+      className="min-h-[100svh] pt-24 pb-12"
     >
       <div className="container mx-auto px-6 max-w-6xl">
         <button 
@@ -64,42 +75,112 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
 
               <div className="grid grid-cols-2 gap-4">
                  <div className="p-4 bg-brand-surface border border-brand-border rounded-xl">
-                    <div className="flex items-center gap-2 text-brand-muted mb-2">
+                 <div className="flex items-center gap-2 text-brand-muted mb-2">
                        <Calendar size={16} />
                        <span className="text-xs font-mono uppercase">Timeline</span>
                     </div>
                     <span className="text-white font-bold">{project.timeline}</span>
                  </div>
-                 <div className="p-4 bg-brand-surface border border-brand-border rounded-xl">
-                    <div className="flex items-center gap-2 text-brand-muted mb-2">
-                       <Layers size={16} className="text-brand-muted" />
-                       <span className="text-xs font-mono uppercase">Type</span>
+                 <a
+                   href={project.githubUrl}
+                   target="_blank"
+                   rel="noreferrer"
+                   className="relative p-4 bg-brand-surface border border-brand-border rounded-xl overflow-hidden group hover:border-brand-accent hover:-translate-y-0.5 transition duration-300"
+                 >
+                    <span className="absolute inset-0 bg-gradient-to-br from-brand-accent/10 via-transparent to-brand-accent/0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none" />
+                    <ArrowUpRight size={16} className="absolute top-3 right-3 text-brand-muted group-hover:text-brand-accent transition-colors" />
+                    <div className="flex items-center gap-3">
+                       <div className="p-2.5 rounded-lg bg-white/5 border border-white/10 text-white">
+                          <Github size={24} />
+                       </div>
+                       <div className="flex flex-col gap-1">
+                          <span className="text-xs font-mono uppercase tracking-wider text-brand-muted">GitHub</span>
+                          <span className="text-lg font-bold text-white leading-tight">Repo</span>
+                       </div>
                     </div>
-                    <span className="text-white font-bold">{project.type}</span>
-                 </div>
+                 </a>
               </div>
            </div>
 
            <div className="lg:col-span-7 flex flex-col gap-6">
-              <div className="w-full aspect-video bg-brand-surface border border-brand-border rounded-xl overflow-hidden relative group">
-                 <div className="absolute inset-0 flex items-center justify-center">
-                    <Layers size={64} className="text-brand-muted/20 group-hover:text-brand-muted/40 transition-colors" />
-                 </div>
-                 <div className="absolute bottom-4 right-4 bg-black/50 px-3 py-1 rounded text-xs text-brand-muted font-mono">
-                    Main Interface View
-                 </div>
-                 {/* <img src="" className="w-full h-full object-cover" /> */}
+              <div
+                className={`w-full ${mainMediaAspectRatio ? '' : 'aspect-video'} bg-brand-surface border border-brand-border rounded-xl overflow-hidden relative group`}
+                style={mainMediaAspectRatio ? { aspectRatio: mainMediaAspectRatio } : undefined}
+              >
+                 {mainVideoSrc ? (
+                   <>
+                     <video
+                       key={mainVideoSrc}
+                       src={mainVideoSrc}
+                       autoPlay
+                       loop
+                       muted
+                       controls
+                       playsInline
+                       preload="metadata"
+                       className="w-full h-full object-cover"
+                     />
+                     <div className="absolute bottom-4 right-4 bg-black/60 px-3 py-1 rounded text-xs text-white font-mono">
+                        Demo Video
+                     </div>
+                   </>
+                 ) : (
+                   <>
+                     <div className="absolute inset-0 flex items-center justify-center">
+                        <Layers size={64} className="text-brand-muted/20 group-hover:text-brand-muted/40 transition-colors" />
+                      </div>
+                     <div className="absolute bottom-4 right-4 bg-black/50 px-3 py-1 rounded text-xs text-brand-muted font-mono">
+                        {hasVideo ? 'Loading video...' : 'Main Interface View'}
+                      </div>
+                   </>
+                 )}
               </div>
 
-              <div className="w-full md:w-2/3 ml-auto aspect-[21/9] bg-brand-surface border border-brand-border rounded-xl overflow-hidden relative group">
-                 <div className="absolute inset-0 flex items-center justify-center">
-                    <Layers size={48} className="text-brand-muted/20 group-hover:text-brand-muted/40 transition-colors" />
-                 </div>
-                 <div className="absolute bottom-4 right-4 bg-black/50 px-3 py-1 rounded text-xs text-brand-muted font-mono">
-                  
-                 </div>
-                 {/* <img src="" className="w-full h-full object-cover" /> */}
-              </div>
+              {showSecondaryMedia && (
+                <div className="w-full aspect-video bg-brand-surface border border-brand-border rounded-xl overflow-hidden relative group">
+                  {detailVideoSrc ? (
+                    <>
+                      <video
+                        key={detailVideoSrc}
+                        src={detailVideoSrc}
+                        autoPlay
+                        loop
+                        muted
+                        controls
+                        playsInline
+                        preload="metadata"
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute bottom-4 right-4 bg-black/60 px-3 py-1 rounded text-xs text-white font-mono">
+                      {detailMediaLabel}
+                      </div>
+                    </>
+                  ) : detailImageSrc ? (
+                    <>
+                      <img
+                        src={detailImageSrc}
+                        alt={`${project.title} detailed screen`}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
+                      <div className="absolute bottom-4 right-4 bg-black/60 px-3 py-1 rounded text-xs text-white font-mono">
+                      {detailMediaLabel}
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Layers size={48} className="text-brand-muted/20 group-hover:text-brand-muted/40 transition-colors" />
+                      </div>
+                      <div className="absolute bottom-4 right-4 bg-black/50 px-3 py-1 rounded text-xs text-brand-muted font-mono">
+                        Additional View
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
            </div>
         </div>
       </div>

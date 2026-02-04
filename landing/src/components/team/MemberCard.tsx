@@ -1,15 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { TeamMember } from '../../shared/types';
-import { Code, Briefcase, User } from 'lucide-react';
+import { Code, Briefcase, User, Github, ArrowUpRight } from 'lucide-react';
 
 interface MemberCardProps {
   member: TeamMember;
   index: number;
+  mediaReady: boolean;
 }
 
-const MemberCard: React.FC<MemberCardProps> = ({ member, index }) => {
+const MemberCard: React.FC<MemberCardProps> = ({ member, index, mediaReady }) => {
   const isEven = index % 2 === 0;
+  const imageSrc = mediaReady ? member.imageSrc : undefined;
 
   return (
     <motion.div
@@ -22,8 +24,14 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, index }) => {
       <div className="w-full lg:w-1/2 relative group">
         <div className={`absolute -inset-1 bg-gradient-to-r ${member.imagePlaceholderColor} rounded-2xl blur opacity-0 group-hover:opacity-40 transition duration-500`}></div>
         <div className="relative aspect-square rounded-2xl bg-brand-surface border border-brand-border overflow-hidden flex items-center justify-center group-hover:border-brand-accent/30 transition-colors duration-500">
-            {member.imageSrc ? (
-              <img src={member.imageSrc} alt={member.name} className="w-full h-full object-cover " />
+            {imageSrc ? (
+              <img
+                src={imageSrc}
+                alt={member.name}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover "
+              />
             ) : (
               <div className="text-center p-6 text-brand-muted">
                   <User size={64} className="mx-auto mb-4 opacity-50" />
@@ -65,10 +73,19 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, index }) => {
                 <span className="block text-brand-muted text-xs uppercase tracking-wider">Experience</span>
                 <span className="block text-2xl font-bold font-mono text-white">{member.experience}</span>
             </div>
-            <div className="p-4 rounded-xl bg-brand-surface border border-brand-border">
-                <span className="block text-brand-muted text-xs uppercase tracking-wider">Projects</span>
-                <span className="block text-2xl font-bold font-mono text-white">{member.projectsCount}</span>
-            </div>
+            <a
+              href={member.githubUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="relative p-4 rounded-xl bg-brand-surface border border-brand-border hover:border-brand-accent hover:-translate-y-0.5 transition duration-300 flex flex-col gap-1 group"
+            >
+              <ArrowUpRight size={16} className="absolute top-3 right-3 text-brand-muted group-hover:text-brand-accent transition-colors" />
+              <span className="block text-brand-muted text-xs uppercase tracking-wider">GitHub</span>
+              <span className="flex items-center gap-2 text-2xl font-bold font-mono text-white leading-tight">
+                <Github size={22} className="text-white" />
+                Profile
+              </span>
+            </a>
         </div>
       </div>
     </motion.div>

@@ -7,9 +7,12 @@ interface ProjectCardProps {
   project: Project;
   index: number;
   onClick: (project: Project) => void;
+  mediaReady: boolean;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick, mediaReady }) => {
+  const imageSrc = mediaReady ? project.imageSrc : undefined;
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -21,10 +24,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick }) =>
       className="group relative flex flex-col h-full bg-brand-surface border border-brand-border rounded-xl overflow-hidden hover:border-brand-accent transition-colors duration-300 cursor-pointer"
     >
       <div className={`h-48 w-full ${project.imagePlaceholderColor} relative overflow-hidden border-b border-brand-border`}>
-         {project.imageSrc && (
+         {imageSrc && (
             <img
-               src={project.imageSrc}
+               src={imageSrc}
                alt={`${project.title} preview`}
+               loading="lazy"
+               decoding="async"
                className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
          )}

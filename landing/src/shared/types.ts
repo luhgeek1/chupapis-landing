@@ -7,9 +7,15 @@ export interface Project {
   tags: string[];
   imagePlaceholderColor: string;
   imageSrc?: string;
+  detailImageSrc?: string;
   techHighlights?: string[];
-  type: string;
-  timeline:string;
+  githubUrl: string;
+  timeline: string;
+  videoSrc?: string;
+  detailVideoSrc?: string;
+  hideSecondaryMedia?: boolean;
+  videoAspectRatio?: string;
+  detailMediaLabel?: string;
 }
 
 export interface TeamMember {
@@ -19,7 +25,7 @@ export interface TeamMember {
   bio: string;
   techStack: string[];
   experience: string;
-  projectsCount: number;
+  githubUrl: string;
   imagePlaceholderColor: string;
   imageSrc?: string;
 }
