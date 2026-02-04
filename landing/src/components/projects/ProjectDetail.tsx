@@ -20,6 +20,9 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, mediaRea
   const mainVideoSrc = mediaReady ? project.videoSrc : undefined;
   const detailVideoSrc = mediaReady ? project.detailVideoSrc : undefined;
   const detailImageSrc = mediaReady ? project.detailImageSrc : undefined;
+  const showSecondaryMedia = !project.hideSecondaryMedia;
+  const mainMediaAspectRatio = project.videoAspectRatio;
+  const detailMediaLabel = project.detailMediaLabel ?? 'Product Screen';
 
   return (
     <motion.div
@@ -100,7 +103,10 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, mediaRea
            </div>
 
            <div className="lg:col-span-7 flex flex-col gap-6">
-              <div className="w-full aspect-video bg-brand-surface border border-brand-border rounded-xl overflow-hidden relative group">
+              <div
+                className={`w-full ${mainMediaAspectRatio ? '' : 'aspect-video'} bg-brand-surface border border-brand-border rounded-xl overflow-hidden relative group`}
+                style={mainMediaAspectRatio ? { aspectRatio: mainMediaAspectRatio } : undefined}
+              >
                  {mainVideoSrc ? (
                    <>
                      <video
@@ -130,49 +136,51 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, mediaRea
                  )}
               </div>
 
-              <div className="w-full aspect-video bg-brand-surface border border-brand-border rounded-xl overflow-hidden relative group">
-                {detailVideoSrc ? (
-                  <>
-                    <video
-                      key={detailVideoSrc}
-                      src={detailVideoSrc}
-                      autoPlay
-                      loop
-                      muted
-                      controls
-                      playsInline
-                      preload="metadata"
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute bottom-4 right-4 bg-black/60 px-3 py-1 rounded text-xs text-white font-mono">
-                      Product Screen
-                    </div>
-                  </>
-                ) : detailImageSrc ? (
-                  <>
-                    <img
-                      src={detailImageSrc}
-                      alt={`${project.title} detailed screen`}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
-                    <div className="absolute bottom-4 right-4 bg-black/60 px-3 py-1 rounded text-xs text-white font-mono">
-                      Product Screen
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <Layers size={48} className="text-brand-muted/20 group-hover:text-brand-muted/40 transition-colors" />
-                    </div>
-                    <div className="absolute bottom-4 right-4 bg-black/50 px-3 py-1 rounded text-xs text-brand-muted font-mono">
-                      Additional View
-                    </div>
-                  </>
-                )}
-              </div>
+              {showSecondaryMedia && (
+                <div className="w-full aspect-video bg-brand-surface border border-brand-border rounded-xl overflow-hidden relative group">
+                  {detailVideoSrc ? (
+                    <>
+                      <video
+                        key={detailVideoSrc}
+                        src={detailVideoSrc}
+                        autoPlay
+                        loop
+                        muted
+                        controls
+                        playsInline
+                        preload="metadata"
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute bottom-4 right-4 bg-black/60 px-3 py-1 rounded text-xs text-white font-mono">
+                      {detailMediaLabel}
+                      </div>
+                    </>
+                  ) : detailImageSrc ? (
+                    <>
+                      <img
+                        src={detailImageSrc}
+                        alt={`${project.title} detailed screen`}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
+                      <div className="absolute bottom-4 right-4 bg-black/60 px-3 py-1 rounded text-xs text-white font-mono">
+                      {detailMediaLabel}
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Layers size={48} className="text-brand-muted/20 group-hover:text-brand-muted/40 transition-colors" />
+                      </div>
+                      <div className="absolute bottom-4 right-4 bg-black/50 px-3 py-1 rounded text-xs text-brand-muted font-mono">
+                        Additional View
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
            </div>
         </div>
       </div>

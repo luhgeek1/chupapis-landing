@@ -13,6 +13,9 @@ export interface Project {
   timeline: string;
   videoSrc?: string;
   detailVideoSrc?: string;
+  hideSecondaryMedia?: boolean;
+  videoAspectRatio?: string;
+  detailMediaLabel?: string;
 }
 
 export interface TeamMember {

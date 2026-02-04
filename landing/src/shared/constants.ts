@@ -15,6 +15,7 @@ const codeVideo = `${import.meta.env.BASE_URL}code.mp4`;
 const financialVideo = `${import.meta.env.BASE_URL}finan.mp4`;
 const botImage = new URL('../assets/bot.png', import.meta.url).href;
 const chupapisVideo = `${import.meta.env.BASE_URL}Chupapis.mov`;
+const botVideo = `${import.meta.env.BASE_URL}bot.mov`;
 
 export const TEAM_NAME = "чупапис";
 export const TEAM_DESCRIPTION = "Мы — команда из двух разработчиков: frontend и backend. Уже больше двух лет мы работаем вместе и за это время успели реализовать несколько масштабных проектов. На Олимпиаде Prod мы делаем веб-продукт под ключ: React на фронте и Python на бэке — с упором на качество, архитектуру и скорость.";
@@ -77,12 +78,13 @@ export const PROJECTS: Project[] = [
     ],
     timeline: "⏱ 2 дня",
     githubUrl: "https://github.com/laughinme/CodeMetrics",
-    link: "https://codemetr1cs.netlify.app",
+    link: "https://code-metrics-psi.vercel.app/",
     tags: ["React", "Vite", "Tailwind", "TS", "FastAPI", "PostgreSQL", "Redis", "Docker", "Nginx"],
     imagePlaceholderColor: "bg-neutral-900",
     imageSrc: codeImage,
     detailImageSrc: codeImage,
     detailVideoSrc: chupapisVideo,
+    detailMediaLabel: "Flawlёss Moment",
     videoSrc: codeVideo,
   },
 
@@ -92,7 +94,7 @@ export const PROJECTS: Project[] = [
     description:
       "Монорепо под продукт в домене автозапчастей: backend + frontend + mobile в единой структуре.",
     longDescription:
-      "AutoSpareParts — флагманский full-stack проект: маркетплейс для размещения и продажи автозапчастей, который вырос из идеи потенциального бизнес-продукта. Здесь много сложной доменной логики на бэкенде и “большая” архитектура, поэтому проект ощущается как настоящий продакшн-кандидат, а не учебный прототип. Над веб-частью работали два человека, параллельно команда из двух разработчиков делала интерфейс для Android-приложения. Отдельно выделяется платежная часть — подключена интеграция со Stripe",
+      "AutoSpareParts — флагманский full-stack проект: маркетплейс для размещения и продажи автозапчастей, который вырос из идеи потенциального бизнес-продукта. Здесь много сложной доменной логики на бэкенде и “большая” архитектура, поэтому проект ощущается как настоящий продакшн-кандидат, а не учебный прототип. Над веб-частью работали два человека, параллельно команда из двух разработчиков делала интерфейс для Android-приложения. Отдельно выделяется платежная часть — подключена интеграция со Stripe. Проект еще в разработке.",
     techHighlights: [
       "Монорепо структура: backend / frontend / mobile",
       "Есть docker-compose.yml для поднятия окружения локально",
@@ -101,7 +103,7 @@ export const PROJECTS: Project[] = [
     ],
     timeline: "⏱ 3 недели",
     githubUrl: "https://github.com/laughinme/auto-spare-parts",
-    link: "https://github.com/laughinme/auto-spare-parts",
+    link: "https://auto-spare-parts-gules.vercel.app/",
     tags: ["React", "Vite", "Tailwind", "TS", "FastAPI", "PostgreSQL", "Redis", "Nginx"],
     imagePlaceholderColor: "bg-zinc-900",
     imageSrc: autoImage,
@@ -123,7 +125,7 @@ export const PROJECTS: Project[] = [
     ],
     timeline: "⏱ 4 дня",
     githubUrl: "https://github.com/laughinme/hackathon",
-    link: "https://github.com/laughinme/hackathon",
+    link: "https://books-exchange.vercel.app/",
     tags: ["React", "Vite", "Tailwind", "JS", "FastAPI", "PostgreSQL", "Redis", "Nginx"],
     imagePlaceholderColor: "bg-stone-900",
     imageSrc: bookImage,
@@ -170,9 +172,12 @@ export const PROJECTS: Project[] = [
     ],
     timeline: "⏱ a lot",
     githubUrl: "https://github.com/laughinme/helpus3",
-    link: "https://github.com/laughinme/helpus3",
+    link: "https://t.me/helputils_bot",
     tags: ["Python", "Telegram Bot", "aiogram", "Parsing", "Notifications"],
     imagePlaceholderColor: "bg-zinc-800",
     imageSrc: botImage,
+    videoSrc: botVideo,
+    hideSecondaryMedia: true,
+    videoAspectRatio: "641 / 448",
   },
 ];
