@@ -26,6 +26,8 @@ export interface TeamMember {
   techStack: string[];
   experience: string;
   githubUrl: string;
+  telegramHandle?: string;
+  telegramUrl?: string;
   imagePlaceholderColor: string;
   imageSrc?: string;
 }

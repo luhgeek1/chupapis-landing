@@ -23,7 +23,14 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, index, mediaReady }) =>
     >
       <div className="w-full lg:w-1/2 relative group">
         <div className={`absolute -inset-1 bg-gradient-to-r ${member.imagePlaceholderColor} rounded-2xl blur opacity-0 group-hover:opacity-40 transition duration-500`}></div>
-        <div className="relative aspect-square rounded-2xl bg-brand-surface border border-brand-border overflow-hidden flex items-center justify-center group-hover:border-brand-accent/30 transition-colors duration-500">
+        {member.telegramUrl ? (
+          <a
+            href={member.telegramUrl}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`${member.name} on Telegram`}
+            className="relative aspect-square rounded-2xl bg-brand-surface border border-brand-border overflow-hidden flex items-center justify-center group-hover:border-brand-accent/30 transition-colors duration-500 cursor-pointer"
+          >
             {imageSrc ? (
               <img
                 src={imageSrc}
@@ -39,10 +46,34 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, index, mediaReady }) =>
             )}
 
             <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent">
-                <h3 className="text-3xl font-bold text-white font-sans">{member.name}</h3>
+                <h3 className="text-3xl font-bold text-white font-sans underline underline-offset-4 decoration-white/70 group-hover:text-brand-accent group-hover:decoration-brand-accent transition-colors">
+                  {member.name}
+                </h3>
                 <p className="text-brand-muted font-mono">{member.role}</p>
             </div>
-        </div>
+          </a>
+        ) : (
+          <div className="relative aspect-square rounded-2xl bg-brand-surface border border-brand-border overflow-hidden flex items-center justify-center group-hover:border-brand-accent/30 transition-colors duration-500">
+              {imageSrc ? (
+                <img
+                  src={imageSrc}
+                  alt={member.name}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover "
+                />
+              ) : (
+                <div className="text-center p-6 text-brand-muted">
+                    <User size={64} className="mx-auto mb-4 opacity-50" />
+                </div>
+              )}
+
+              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent">
+                  <h3 className="text-3xl font-bold text-white font-sans">{member.name}</h3>
+                  <p className="text-brand-muted font-mono">{member.role}</p>
+              </div>
+          </div>
+        )}
       </div>
 
       <div className="w-full lg:w-1/2 space-y-6">
