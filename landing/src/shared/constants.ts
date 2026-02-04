@@ -3,6 +3,8 @@ import { Project, TeamMember, TeamStats } from './types';
 const stepanPhoto = new URL('../assets/Step.png', import.meta.url).href;
 const MarksPhoto = new URL('../assets/Mark.PNG', import.meta.url).href;
 const autoImage = new URL('../assets/auto.png', import.meta.url).href;
+const autoVideo1 = `${import.meta.env.BASE_URL}auto1.mov`;
+const autoVideo2 = `${import.meta.env.BASE_URL}auto2.mov`;
 const codeImage = new URL('../assets/code.png', import.meta.url).href;
 const bookImage = new URL('../assets/book.png', import.meta.url).href;
 const bookDetailImage = new URL('../assets/booksprof.png', import.meta.url).href;
@@ -103,6 +105,8 @@ export const PROJECTS: Project[] = [
     tags: ["React", "Vite", "Tailwind", "TS", "FastAPI", "PostgreSQL", "Redis", "Nginx"],
     imagePlaceholderColor: "bg-zinc-900",
     imageSrc: autoImage,
+    videoSrc: autoVideo2,
+    detailVideoSrc: autoVideo1,
   },
 
   {
