@@ -175,7 +175,7 @@ export const PROJECTS: Project[] = [
       "Env-конфиги: BOT_TOKEN, admin_id, опционально OPENAI_API_KEY",
     ],
     timeline: "⏱ a lot",
-    githubUrl: "https://github.com/laughinme/helpus3",
+    githubUrl: "",
     link: "https://t.me/helputils_bot",
     tags: ["Python", "Telegram Bot", "aiogram", "Parsing", "Notifications"],
     imagePlaceholderColor: "bg-zinc-800",
