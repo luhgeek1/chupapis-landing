@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ExternalLink, Calendar, Layers,Github, ArrowUpRight } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Layers, Github, ArrowUpRight } from 'lucide-react';
 import { Project } from '../../shared/types';
 
 interface ProjectDetailProps {
@@ -104,13 +104,24 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, mediaRea
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                 <div className="p-4 bg-brand-surface border border-brand-border rounded-xl">
-                 <div className="flex items-center gap-2 text-brand-muted mb-2">
-                       <Calendar size={16} />
-                       <span className="text-xs font-mono uppercase">Timeline</span>
+                 <a
+                   href={project.link}
+                   target="_blank"
+                   rel="noreferrer"
+                   className="relative p-4 bg-brand-surface border border-brand-border rounded-xl overflow-hidden group hover:border-brand-accent hover:-translate-y-0.5 transition duration-300 block"
+                 >
+                    <span className="absolute inset-0 bg-gradient-to-br from-brand-accent/10 via-transparent to-brand-accent/0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none" />
+                    <ArrowUpRight size={16} className="absolute top-3 right-3 text-brand-muted group-hover:text-brand-accent transition-colors" />
+                    <div className="flex items-center gap-3">
+                       <div className="p-2.5 rounded-lg bg-white/5 border border-white/10 text-white">
+                          <ExternalLink size={24} />
+                       </div>
+                       <div className="flex flex-col gap-1">
+                          <span className="text-xs font-mono uppercase tracking-wider text-brand-muted">Live Demo</span>
+                          <span className="text-lg font-bold text-white leading-tight">Open</span>
+                       </div>
                     </div>
-                    <span className="text-white font-bold">{project.timeline}</span>
-                 </div>
+                 </a>
                  <div className="relative">
                    {showGithubTooltip && !hasGithubUrl && (
                      <span className="absolute left-1/2 -top-2 -translate-x-1/2 -translate-y-full rounded-md bg-black/90 text-white text-xs font-mono px-2 py-1 shadow-lg border border-white/10 whitespace-nowrap z-10">

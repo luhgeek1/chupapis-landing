@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import { Terminal, Cpu, Coffee, Award, ArrowDown } from 'lucide-react';
 import Background3D from './components/background/Background';
 import MemberCard from './components/team/MemberCard';
@@ -25,16 +25,25 @@ const getProjectFromUrl = (): Project | null => {
 
 function App() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(() => getProjectFromUrl());
-  const [isReturning, setIsReturning] = useState(false);
+  const [pendingScrollToProjects, setPendingScrollToProjects] = useState(false);
   const [isHeroVideoReady, setIsHeroVideoReady] = useState(false);
   const mediaReady = useDeferredMedia(800);
   const heroVideoSrc = mediaReady ? `${import.meta.env.BASE_URL}hero1.MOV` : undefined;
+  const projectsSectionRef = useRef<HTMLElement | null>(null);
+
+  const setProjectsHash = useCallback(() => {
+    if (typeof window === 'undefined') return;
+    const url = new URL(window.location.href);
+    if (url.hash === '#projects') return;
+    url.hash = 'projects';
+    window.history.replaceState(window.history.state, '', url);
+  }, []);
 
   const handleProjectSelect = useCallback((project: Project) => {
     if (selectedProject?.id === project.id) return;
 
     setSelectedProject(project);
-    setIsReturning(false);
+    setPendingScrollToProjects(false);
 
     const url = new URL(window.location.href);
     url.searchParams.set('project', String(project.id));
@@ -57,8 +66,9 @@ function App() {
     }
 
     setSelectedProject(null);
-    setIsReturning(true);
-  }, []);
+    setPendingScrollToProjects(true);
+    setProjectsHash();
+  }, [setProjectsHash]);
 
   useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
@@ -74,16 +84,17 @@ function App() {
 
       if (nextProject) {
         setSelectedProject(nextProject);
-        setIsReturning(false);
+        setPendingScrollToProjects(false);
       } else {
         setSelectedProject(null);
-        setIsReturning(true);
+        setPendingScrollToProjects(true);
+        setProjectsHash();
       }
     };
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
+  }, [setProjectsHash]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -112,37 +123,65 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedProject, handleBack, handleProjectSelect]);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!pendingScrollToProjects) return;
+    if (typeof window === 'undefined') return;
+    let rafId = 0;
+    let attempts = 0;
+    const root = document.documentElement;
+    const previousScrollBehavior = root.style.scrollBehavior;
+
+    root.style.scrollBehavior = 'auto';
+
+    const tryScroll = () => {
+      attempts += 1;
+      const projectsSection = projectsSectionRef.current;
+      if (projectsSection) {
+        setProjectsHash();
+        projectsSection.scrollIntoView({ behavior: 'auto', block: 'start' });
+        setPendingScrollToProjects(false);
+        root.style.scrollBehavior = previousScrollBehavior;
+        return;
+      }
+
+      if (attempts < 30) {
+        rafId = window.requestAnimationFrame(tryScroll);
+      } else {
+        setPendingScrollToProjects(false);
+        root.style.scrollBehavior = previousScrollBehavior;
+      }
+    };
+
+    rafId = window.requestAnimationFrame(tryScroll);
+    return () => {
+      if (rafId) {
+        window.cancelAnimationFrame(rafId);
+      }
+      root.style.scrollBehavior = previousScrollBehavior;
+    };
+  }, [pendingScrollToProjects, setProjectsHash]);
+
   return (
     <div className="min-h-[100svh] relative selection:bg-brand-accent selection:text-black">
       <Background3D />
 
       <main className="relative z-10">
-        <AnimatePresence mode="wait">
-          {selectedProject ? (
-            <ProjectDetail 
-              key="project-detail" 
-              project={selectedProject} 
-              onBack={handleBack}
-              mediaReady={mediaReady}
-            />
-          ) : (
-            <motion.div
-              key="home"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.5 }}
-              onAnimationComplete={() => {
-                if (isReturning) {
-                  const projectsSection = document.getElementById('projects');
-                  if (projectsSection) {
-                    projectsSection.scrollIntoView({ behavior: 'smooth' });
-                  }
-                  setIsReturning(false);
-                }
-              }}
-              className=""
-            >
+        {selectedProject ? (
+          <ProjectDetail 
+            key="project-detail" 
+            project={selectedProject} 
+            onBack={handleBack}
+            mediaReady={mediaReady}
+          />
+        ) : (
+          <div className="">
               <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden pt-20">
                 <div
                   className="absolute inset-0 transition-opacity duration-700"
@@ -245,7 +284,11 @@ function App() {
                   </div>
               </section>
 
-              <section id="projects" className="py-24 border-t border-brand-border mb-24">
+              <section
+                id="projects"
+                ref={projectsSectionRef}
+                className="py-24 border-t border-brand-border mb-24"
+              >
                   <div className="flex flex-col md:flex-row justify-between items-end mb-16">
                       <div>
                           <h2 className="text-4xl md:text-5xl font-bold mb-4 font-sans flex items-center gap-4 text-white">
@@ -274,9 +317,8 @@ function App() {
                   <p>&copy; {new Date().getFullYear()} {TEAM_NAME}</p>
               </footer>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+          </div>
+        )}
       </main>
     </div>
   );
