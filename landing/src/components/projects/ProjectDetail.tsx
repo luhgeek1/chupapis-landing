@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ExternalLink, Calendar, Layers,Github, ArrowUpRight } from 'lucide-react';
 import { Project } from '../../shared/types';
@@ -10,8 +10,19 @@ interface ProjectDetailProps {
 }
 
 const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, mediaReady }) => {
+  const [showGithubTooltip, setShowGithubTooltip] = useState(false);
+  const tooltipTimeoutRef = useRef<number | null>(null);
+
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (tooltipTimeoutRef.current !== null) {
+        window.clearTimeout(tooltipTimeoutRef.current);
+      }
+    };
   }, []);
 
   const hasVideo = Boolean(project.videoSrc);
@@ -23,6 +34,25 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, mediaRea
   const showSecondaryMedia = !project.hideSecondaryMedia;
   const mainMediaAspectRatio = project.videoAspectRatio;
   const detailMediaLabel = project.detailMediaLabel ?? 'Product Screen';
+  const hasGithubUrl = Boolean(project.githubUrl && project.githubUrl.trim().length > 0);
+  const githubHref = hasGithubUrl ? project.githubUrl : '#';
+
+  const handleGithubClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (hasGithubUrl) {
+      return;
+    }
+
+    event.preventDefault();
+    setShowGithubTooltip(true);
+
+    if (tooltipTimeoutRef.current !== null) {
+      window.clearTimeout(tooltipTimeoutRef.current);
+    }
+
+    tooltipTimeoutRef.current = window.setTimeout(() => {
+      setShowGithubTooltip(false);
+    }, 2000);
+  };
 
   return (
     <motion.div
@@ -81,24 +111,32 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack, mediaRea
                     </div>
                     <span className="text-white font-bold">{project.timeline}</span>
                  </div>
-                 <a
-                   href={project.githubUrl}
-                   target="_blank"
-                   rel="noreferrer"
-                   className="relative p-4 bg-brand-surface border border-brand-border rounded-xl overflow-hidden group hover:border-brand-accent hover:-translate-y-0.5 transition duration-300"
-                 >
-                    <span className="absolute inset-0 bg-gradient-to-br from-brand-accent/10 via-transparent to-brand-accent/0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none" />
-                    <ArrowUpRight size={16} className="absolute top-3 right-3 text-brand-muted group-hover:text-brand-accent transition-colors" />
-                    <div className="flex items-center gap-3">
-                       <div className="p-2.5 rounded-lg bg-white/5 border border-white/10 text-white">
-                          <Github size={24} />
-                       </div>
-                       <div className="flex flex-col gap-1">
-                          <span className="text-xs font-mono uppercase tracking-wider text-brand-muted">GitHub</span>
-                          <span className="text-lg font-bold text-white leading-tight">Repo</span>
-                       </div>
-                    </div>
-                 </a>
+                 <div className="relative">
+                   {showGithubTooltip && !hasGithubUrl && (
+                     <span className="absolute left-1/2 -top-2 -translate-x-1/2 -translate-y-full rounded-md bg-black/90 text-white text-xs font-mono px-2 py-1 shadow-lg border border-white/10 whitespace-nowrap z-10">
+                       Пока недоступно(
+                     </span>
+                   )}
+                   <a
+                     href={githubHref}
+                     onClick={handleGithubClick}
+                     target={hasGithubUrl ? "_blank" : undefined}
+                     rel={hasGithubUrl ? "noreferrer" : undefined}
+                     className="relative p-4 bg-brand-surface border border-brand-border rounded-xl overflow-hidden group hover:border-brand-accent hover:-translate-y-0.5 transition duration-300 block"
+                   >
+                      <span className="absolute inset-0 bg-gradient-to-br from-brand-accent/10 via-transparent to-brand-accent/0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none" />
+                      <ArrowUpRight size={16} className="absolute top-3 right-3 text-brand-muted group-hover:text-brand-accent transition-colors" />
+                      <div className="flex items-center gap-3">
+                         <div className="p-2.5 rounded-lg bg-white/5 border border-white/10 text-white">
+                            <Github size={24} />
+                         </div>
+                         <div className="flex flex-col gap-1">
+                            <span className="text-xs font-mono uppercase tracking-wider text-brand-muted">GitHub</span>
+                            <span className="text-lg font-bold text-white leading-tight">Repo</span>
+                         </div>
+                      </div>
+                   </a>
+                 </div>
               </div>
            </div>
 
