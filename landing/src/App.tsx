@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Terminal, Cpu, Coffee, Award, ArrowDown } from 'lucide-react';
-import Background3D from './components/background/Background';
 import MemberCard from './components/team/MemberCard';
 import ProjectCard from './components/projects/ProjectCard';
 import ProjectDetail from './components/projects/ProjectDetail';
@@ -170,8 +169,6 @@ function App() {
 
   return (
     <div className="min-h-[100svh] relative selection:bg-brand-accent selection:text-black">
-      <Background3D />
-
       <main className="relative z-10">
         {selectedProject ? (
           <ProjectDetail 
