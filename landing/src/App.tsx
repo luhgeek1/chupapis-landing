@@ -29,6 +29,7 @@ function App() {
   const mediaReady = useDeferredMedia(800);
   const heroVideoSrc = mediaReady ? `${import.meta.env.BASE_URL}hero1.MOV` : undefined;
   const projectsSectionRef = useRef<HTMLElement | null>(null);
+  const aboutSectionRef = useRef<HTMLElement | null>(null);
 
   const setProjectsHash = useCallback(() => {
     if (typeof window === 'undefined') return;
@@ -68,6 +69,19 @@ function App() {
     setPendingScrollToProjects(true);
     setProjectsHash();
   }, [setProjectsHash]);
+
+  const handleScrollToAbout = useCallback((event?: React.MouseEvent<HTMLAnchorElement>) => {
+    event?.preventDefault();
+    if (typeof window === 'undefined') return;
+    if (!aboutSectionRef.current) return;
+
+    aboutSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const url = new URL(window.location.href);
+    if (url.hash !== '#about') {
+      url.hash = 'about';
+      window.history.replaceState(window.history.state, '', url);
+    }
+  }, []);
 
   useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
@@ -219,6 +233,7 @@ function App() {
 
                     <motion.a 
                       href="#about"
+                      onClick={handleScrollToAbout}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       className="inline-flex items-center gap-3 bg-white text-black border border-white px-8 py-3 rounded-full font-bold hover:bg-black hover:text-white transition-all duration-300"
@@ -230,7 +245,7 @@ function App() {
               </section>
 
               <div className="container mx-auto px-6">
-              <section id="about" className="py-24">
+              <section id="about" ref={aboutSectionRef} className="py-24">
                   <motion.div 
                       initial={{ opacity: 0 }}
                       whileInView={{ opacity: 1 }}
